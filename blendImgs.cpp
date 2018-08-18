@@ -19,6 +19,27 @@ using std::string;
  * @function main
  * @brief Main function
  */
+
+static void printImgsDir()
+{
+  struct dirent *ent;
+  DIR *dir;
+  if ((dir = opendir ("./images")) != NULL) {
+    /* print all the files and directories within images directory */
+    while ((ent = readdir (dir)) != NULL) { // iterate through files in dir
+      string fileName = ent->d_name;
+      if (fileName[0] != '.') { // ignore hidden files
+        printf ("%s\n", fileName.c_str());
+      } //endif
+    } //endwhile
+    cout << endl;
+    closedir (dir); //end
+  } else {
+    /* could not open directory */
+    perror ("couldn't open image directory");
+  }
+}
+
 int main(void) {
   double alpha = 0.5;
   double beta;
@@ -42,23 +63,8 @@ int main(void) {
 
   cout << "  Input first image name from selection below " << endl << endl;
   cout << "  ------------------------------------------- " << endl;
-  DIR *dir;
-  struct dirent *ent;
-  if ((dir = opendir ("./images")) != NULL) {
-    /* print all the files and directories within images directory */
-    while ((ent = readdir (dir)) != NULL) { // iterate through files in dir
-      string fileName = ent->d_name;
-      if (fileName[0] != '.') { // ignore hidden files
-        printf ("%s\n", fileName.c_str());
-      } //endif
-    } //endwhile
-    cout << endl;
-    closedir (dir); //end
-  } else {
-    /* could not open directory */
-    perror ("couldn't open image directory");
-    return EXIT_FAILURE;
-  }
+
+  printImgsDir();
 
   // input image names
   cout << "  -----------------------   " << endl;
